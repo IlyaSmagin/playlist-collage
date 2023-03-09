@@ -35,18 +35,22 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className='flex justify-center items-center h-full min-h-screen flex-col'>
-        <label htmlFor='playlistInput' className='mt-12 text-3xl text-gray-300 w-2/3 mb-2'>Playlist link</label>
-        <input id="playlistInput" onChange={(e)=>setPlaylistLink(e.target.value.replace(playlistREGEX, "")) } className="focus:placeholder:text-green-400 placeholder:text-gray-400 border-b-2 focus:border-green-400 border-gray-400 appearance-none w-2/3 text-3xl bg-none px-8 py-4 shadow-sm focus:outline-none focus:caret-green-500 text-green-400 bg-black dark:highlight-white/5" placeholder='playlist link'/>
-        <label htmlFor='targetImageInput' className='mt-12 text-3xl text-gray-300 w-2/3 mb-2'>Link or upload image</label>
-        <div className='w-2/3 flex flex-row'>
-          <input id='targetImageInput'  onChange={(e)=>setTargetLink(e.target.value) } className="focus:placeholder:text-green-400 placeholder:text-gray-400 border-b-2 focus:border-green-400 border-gray-400 appearance-none w-2/3 text-3xl bg-none px-8 shadow-sm focus:outline-none focus:caret-green-500 text-gray-400 bg-black dark:highlight-white/5" placeholder='image link' />
-          <label className="w-1/3 flex justify-center items-end">
+        <label htmlFor='playlistInput' className='mt-12 text-xl md:text-3xl text-gray-300 md:w-2/3 w-10/12 mb-2'>Playlist link</label>
+        <input id="playlistInput" onChange={(e)=>setPlaylistLink(e.target.value.replace(playlistREGEX, "")) } className="focus:placeholder:text-green-400 placeholder:text-gray-400 border-b-2 focus:border-green-400 border-gray-400 appearance-none md:w-2/3 w-10/12 text-xl md:text-3xl bg-none px-8 py-2 md:py-4 shadow-sm focus:outline-none focus:caret-green-500 text-green-400 bg-black dark:highlight-white/5" placeholder='playlist link'/>
+        <label htmlFor='targetImageInput' className='mt-12 text-xl md:text-3xl text-gray-300 md:w-2/3 w-10/12 mb-2'>Upload image</label>
+        <div className='md:w-2/3 w-10/12 flex md:flex-row flex-col'>
+          <input id='targetImageInput'  onChange={(e)=>setTargetLink(e.target.value) } className="hidden focus:placeholder:text-green-400 placeholder:text-gray-400 border-b-2 focus:border-green-400 border-gray-400 appearance-none md:w-2/3 w-full text-xl md:text-3xl bg-none px-8 py-2 md:py-4 shadow-sm focus:outline-none focus:caret-green-500 text-gray-400 bg-black dark:highlight-white/5" placeholder='image link' />
+          <label className="md:w-1/3 w-full flex flex-col justify-center items-end pt-2">
+            <span className='hidden w-full text-gray-300 text-center py-2'>or</span>
             <span className="sr-only">Choose profile photo</span>
-            <input type="file" onChange={(e)=> {if(e.target.files instanceof FileList) return setTargetLink(URL.createObjectURL(e.target.files[0]))}} className="block w-full text-sm pl-4 text-gray-500 file:flex text-center file:w-full file:flex-col file:mb-2 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-gray-100 file:text-green-600 hover:file:bg-green-200 " />
+            <input type="file"
+              onChange={(e) => { if (e.target.files instanceof FileList) return setTargetLink(URL.createObjectURL(e.target.files[0])) }}
+              className="block w-full text-sm md:pt-0 md:pl-4 text-gray-500 file:flex text-center file:w-full file:flex-col file:mb-2 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-gray-100 file:text-green-600 hover:file:bg-green-200 " />
           </label>
         </div>
-        <div className='w-2/3 aspect-square flex justify-center items-center mt-12 collage-wrapper mb-12'>{/*aito-cols-[100%/n]*/}
-          {data ? <ReactImageMosaic width={800} height={800} rows={40} columns={40} sources={data} colorBlending={0.15} target={targetLink || "./mal.jpg"} crossOrigin={"anonymous"} /> : null}
+        <div className='md:w-2/3 w-10/12 aspect-square flex justify-center items-center mt-12 collage-wrapper mb-12'>
+          {data ? <ReactImageMosaic width={800} height={800} rows={40} columns={40} sources={data} colorBlending={0.15} target={targetLink || "./mal.jpg"} crossOrigin={"anonymous"} /> :
+          null}
           {isLoading ? <div className='text-gray-300 animate-pulse'>Loading your playlist...</div>:null}
         </div>
       </main>
