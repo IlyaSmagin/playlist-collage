@@ -98,7 +98,7 @@ export default function Home() {
             />
           </label>
         </div>
-        <div className="text-while w-full mx-6 my-4">
+        <div className="text-while w-full mx-6 my-3">
           <label
             htmlFor="playlistInput"
             className="md:w-2/3 w-10/12 text-xl font-bold text-gray-300"
@@ -115,7 +115,7 @@ export default function Home() {
           />
         </div>
         <form className="flex flex-col items-center justify-center mx-6 text-white w-full">
-          <div className="flex flex-row items-center justify-center gap-3 my-3 text-sm md:text-base">
+          <div className="flex flex-row items-center justify-center gap-3 my-1 text-sm md:text-base">
             <input
               type="radio"
               name="collageOptions"
@@ -166,7 +166,7 @@ export default function Home() {
           />
         </form>
         <button
-          className=" bg-green-500 text-white font-bold rounded-full px-10 py-3 text-sm my-6 active:scale-95 transition-transform"
+          className=" bg-green-500 text-white font-bold rounded-full px-10 py-3 text-sm mt-5 mb-3 active:scale-95 transition-transform"
           onClick={() => setStartGeneration((prev) => !prev)}
         >
           Generate Collage
