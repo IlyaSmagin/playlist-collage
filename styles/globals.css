@@ -10,9 +10,12 @@
 input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none;
   border: 0px solid #000000;
+  width: 13px;
+  height: 13px;
   background: #ffffff;
   cursor: pointer;
-  margin-top: -14px; /* You need to specify a margin in Chrome, but in Firefox and IE it is automatic */
+  border-radius: 100%;
+  margin-top: -5px; /* You need to specify a margin in Chrome, but in Firefox and IE it is automatic */
 }
 /* All the same stuff for Firefox */
 input[type="range"]::-moz-range-thumb {
@@ -28,7 +31,7 @@ input[type="range"]::-ms-thumb {
 }
 
 input[type="range"]::-webkit-slider-runnable-track {
-  height: 8.4px;
+  height: 4px;
   cursor: pointer;
   background: #3f3f46;
   border-radius: 6px;
