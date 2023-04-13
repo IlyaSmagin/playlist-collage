@@ -49,8 +49,8 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <header className="mx-3 mt-6 text-white">
-        <h1 className="my-6 text-3xl font-bold">Playlist collage</h1>
+      <header className="mx-3 mt-5 text-white">
+        <h1 className="my-2 text-3xl font-bold">Playlist collage</h1>
         <nav className="gap-7 flex flex-row mx-3 text-xl">
           <button className="border-b border-green-500 appearance-none">
             Albums
@@ -62,7 +62,7 @@ export default function Home() {
       </header>
 
       <main className="flex flex-col items-center justify-center mx-6 mt-4">
-        <div className="relative md:w-1/3 aspect-square md:flex-row bg-zinc-800 flex flex-col items-center justify-center w-full">
+        <div className="relative sm:w-2/3 md:w-1/3 aspect-square md:flex-row bg-zinc-800 flex flex-col items-center justify-center w-full">
           <div className="aspect-square collage-wrapper flex items-center justify-center w-full mt-12 mb-12 absolute pointer-events-none">
             {data && startGeneration ? (
               <ReactImageMosaic
@@ -98,10 +98,10 @@ export default function Home() {
             />
           </label>
         </div>
-        <div className="text-while w-full mx-6 my-6">
+        <div className="text-while w-full mx-6 my-4">
           <label
             htmlFor="playlistInput"
-            className="md:w-2/3 w-10/12 mb-4 text-xl font-bold text-gray-300"
+            className="md:w-2/3 w-10/12 text-xl font-bold text-gray-300"
           >
             Link playlist
           </label>
@@ -110,12 +110,12 @@ export default function Home() {
             onChange={(e) =>
               setPlaylistLink(e.target.value.replace(playlistREGEX, ""))
             }
-            className="focus:placeholder:text-green-400 placeholder:text-gray-400 focus:border-green-400 bg-none focus:outline-none focus:caret-green-500 dark:highlight-white/5 w-full px-8 py-2 text-sm text-green-400 bg-zinc-800 rounded-md appearance-none"
+            className="focus:placeholder:text-green-400 mt-1 placeholder:text-gray-400 focus:border-green-400 bg-none focus:outline-none focus:caret-green-500 dark:highlight-white/5 w-full px-8 py-2 text-sm text-green-400 bg-zinc-800 rounded-md appearance-none"
             placeholder="Link to playlist"
           />
         </div>
         <form className="flex flex-col items-center justify-center mx-6 text-white w-full">
-          <div className="flex flex-row items-center justify-center gap-4  my-4">
+          <div className="flex flex-row items-center justify-center gap-3 my-3 text-sm md:text-base">
             <input
               type="radio"
               name="collageOptions"
@@ -124,9 +124,10 @@ export default function Home() {
             />
             <label
               htmlFor="size"
-              className="px-4 py-1.5 font-bold border-[1px] border-zinc-700 rounded-full appearance-none"
+              className="px-3 py-1 font-semibold border-[1px] border-zinc-700 rounded-full appearance-none"
             >
-              Image size
+              <span className="hidden sm:block">Image size</span>{" "}
+              <span className="sm:hidden">Size</span>
             </label>
             <input
               type="radio"
@@ -136,7 +137,7 @@ export default function Home() {
             />
             <label
               htmlFor="color"
-              className="px-4 py-1.5 font-bold border-[1px] border-zinc-700 rounded-full appearance-none"
+              className="px-3 py-1 font-semibold border-[1px] border-zinc-700 rounded-full appearance-none"
             >
               Coloring
             </label>
@@ -148,9 +149,10 @@ export default function Home() {
             />
             <label
               htmlFor="grid"
-              className="px-4 py-1.5 font-bold border-[1px] border-zinc-700 rounded-full appearance-none"
+              className="px-3 py-1 font-semibold border-[1px] border-zinc-700 rounded-full appearance-none"
             >
-              Grid size
+              <span className="hidden sm:block">Grid size</span>{" "}
+              <span className="sm:hidden">Grid</span>
             </label>
           </div>
           <input
@@ -164,7 +166,7 @@ export default function Home() {
           />
         </form>
         <button
-          className=" bg-green-500 text-white font-bold rounded-full px-10 py-3 text-sm my-6"
+          className=" bg-green-500 text-white font-bold rounded-full px-10 py-3 text-sm my-6 active:scale-95 transition-transform"
           onClick={() => setStartGeneration((prev) => !prev)}
         >
           Generate Collage
