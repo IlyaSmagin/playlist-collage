@@ -150,7 +150,7 @@ export default function Home() {
             ) : null}
           </div>
         </div>
-        <div className="lg:justify-evenly lg:mx-0 lg:w-1/3 flex flex-col items-center justify-center mx-6 mt-3">
+        <div className="lg:justify-evenly lg:mx-0 md:w-5/12 w-full flex flex-col items-center justify-center mx-6 mt-3">
           <div className="text-while w-full mx-6 my-3">
             <label
               htmlFor="playlistInput"
