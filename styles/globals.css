@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+html,
+#__next {
+  height: 100%;
+  margin: 0;
+}
+
 .collage-wrapper canvas {
   width: 100%;
   height: 100%;

@@ -37,8 +37,8 @@ export default function Home() {
   });
 
   const playlistREGEX = /.*playlist\//i;
-  const playlistURL = "";
-  "https://spotify23.p.rapidapi.com/playlist_tracks/?id=" + playlistLink;
+  const playlistURL =
+    "https://spotify23.p.rapidapi.com/playlist_tracks/?id=" + playlistLink;
   const { data, error, isLoading } = useSWR(
     playlistLink.length > 1 ? [playlistURL, options] : null,
     ([playlistURL, options]) => fetcher(playlistURL)
@@ -74,7 +74,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <header className="mx-3 mt-3 text-white">
+      <header className="mx-3 mt-3 text-white md:hidden">
         <h1 className=" my-1 text-2xl font-bold ">Playlist collage</h1>
         <nav className="gap-7 flex flex-row mx-3 text-xl">
           <button className="border-b border-green-500 appearance-none">
@@ -86,13 +86,13 @@ export default function Home() {
         </nav>
       </header>
 
-      <main className="md:flex-row lg:mx-6 lg:gap-x-28 md:items-stretch flex flex-col items-center justify-center h-full mx-6 mt-3">
+      <main className="md:flex-row lg:mx-6 lg:gap-x-28 md:h-full flex flex-col items-center justify-center mx-6 md:mt-0 mt-3">
         <div
           className={
             "sm:w-2/3 md:w-2/5 aspect-square bg-zinc-800 relative flex flex-col items-center justify-center w-full"
           }
         >
-          {showCanvasMenu ? ( // TODO: change layout to row in desctop
+          {showCanvasMenu ? (
             <div
               className="aspect-square collage-wrapper bg-zinc-800/50 absolute z-20 flex flex-col items-center justify-center w-full mt-12 mb-12 text-white"
               onClick={() => setShowCanvasMenu((prev) => !prev)}
@@ -105,10 +105,10 @@ export default function Home() {
               </button>
               or
               <label
-                className=" flex flex-col items-end justify-center pt-2"
+                className=" flex flex-col items-end justify-center pt-2 "
                 htmlFor="photoUpload"
               >
-                <button className="active:scale-95 px-10 py-3 mt-5 mb-3 text-sm font-bold text-white transition-transform bg-transparent border-[1px] rounded-full">
+                <button className="cursor-pointer active:scale-95 px-10 py-3 mt-5 mb-3 text-sm font-bold text-white transition-transform bg-transparent border-[1px] rounded-full">
                   Upload new image
                 </button>
                 <input
@@ -173,7 +173,21 @@ export default function Home() {
             )}
           </div>
         </div>
-        <div className="lg:justify-evenly lg:mx-0 md:w-5/12 w-full flex flex-col items-center justify-center mx-6 mt-3">
+        <div className="lg:justify-between lg:mx-0 md:w-5/12 w-full flex flex-col md:aspect-square items-center justify-center mx-6 mt-3">
+          <header className="mx-3 mt-3 md:mt-0 text-white hidden md:block w-full">
+            <h1 className=" my-1 md:my-0 md:mb-3 text-2xl font-bold ">
+              Playlist collage
+            </h1>
+            <nav className="gap-7 flex flex-row mx-3 text-xl">
+              <button className="border-b border-green-500 appearance-none">
+                Albums
+              </button>
+              <button disabled className="text-slate-500 appearance-none">
+                Artists
+              </button>
+            </nav>
+          </header>
+
           <div className="text-while w-full mx-6 my-3">
             <label
               htmlFor="playlistInput"
@@ -193,7 +207,7 @@ export default function Home() {
                     cy="12"
                     r="10"
                     stroke="currentColor"
-                    stroke-width="4"
+                    strokeWidth="4"
                   ></circle>
                   <path
                     className="opacity-75"
