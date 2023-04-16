@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { useState, useReducer } from "react";
+import { useState, useCallback } from "react";
 import useSWR from "swr";
 import { ReactImageMosaic } from "react-image-mosaic";
 
@@ -29,16 +29,16 @@ export default function Home() {
   const [startGeneration, setStartGeneration] = useState(false);
   const [targetLink, setTargetLink] = useState<string>();
   const [showCanvasMenu, setShowCanvasMenu] = useState(false);
+  const [currentOption, setCurrentOption] = useState("color");
   const [collageOptions, setCollageOptions] = useState({
     size: 800,
     color: 0.2,
     grid: 40,
   });
 
-  const [currentOption, setCurrentOption] = useState("color");
   const playlistREGEX = /.*playlist\//i;
-  const playlistURL =
-    "https://spotify23.p.rapidapi.com/playlist_tracks/?id=" + playlistLink;
+  const playlistURL = "";
+  "https://spotify23.p.rapidapi.com/playlist_tracks/?id=" + playlistLink;
   const { data, error, isLoading } = useSWR(
     playlistLink.length > 1 ? [playlistURL, options] : null,
     ([playlistURL, options]) => fetcher(playlistURL)
@@ -75,7 +75,7 @@ export default function Home() {
       </Head>
 
       <header className="mx-3 mt-3 text-white">
-        <h1 className=" my-1 text-2xl font-bold">Playlist collage</h1>
+        <h1 className=" my-1 text-2xl font-bold ">Playlist collage</h1>
         <nav className="gap-7 flex flex-row mx-3 text-xl">
           <button className="border-b border-green-500 appearance-none">
             Albums
@@ -111,6 +111,18 @@ export default function Home() {
                 <button className="active:scale-95 px-10 py-3 mt-5 mb-3 text-sm font-bold text-white transition-transform bg-transparent border-[1px] rounded-full">
                   Upload new image
                 </button>
+                <input
+                  id="photoUpload"
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => {
+                    if (e.target.files instanceof FileList)
+                      return setTargetLink(
+                        URL.createObjectURL(e.target.files[0])
+                      );
+                  }}
+                  className="hidden"
+                />
               </label>
             </div>
           ) : null}
@@ -129,39 +141,67 @@ export default function Home() {
                 />
               </div>
             ) : (
-              <label
-                className=" flex flex-col items-end justify-center pt-2"
-                htmlFor="photoUpload"
-              >
-                <span className="sr-only">Upload target photo</span>
-                <input
-                  id="photoUpload"
-                  type="file"
-                  accept="image/*"
-                  onChange={(e) => {
-                    if (e.target.files instanceof FileList)
-                      return setTargetLink(
-                        URL.createObjectURL(e.target.files[0])
-                      );
-                  }}
-                  className=" file:flex file:w-full file:flex-col file:mb-2 file:py-1 file:px-4 file:rounded-full file:border-[1px] file:border-zinc-500 file:text-sm file:font-semibold file:bg-transparent file:appearance-none file:text-gray-400 hover:file:bg-zinc-200 hover:file:text-slate-900 block text-sm text-center text-gray-500"
-                />
-              </label>
+              <>
+                <label
+                  className=" flex flex-col items-end justify-center pt-2"
+                  htmlFor="photoUpload"
+                >
+                  <span className="active:scale-95 px-10 py-3 mt-5 mb-3 text-sm font-bold text-white transition-transform bg-transparent border-[1px] rounded-full">
+                    {targetLink ? "Change collage image" : "Upload new image"}
+                  </span>
+                  <input
+                    id="photoUpload"
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => {
+                      if (e.target.files instanceof FileList)
+                        return setTargetLink(
+                          URL.createObjectURL(e.target.files[0])
+                        );
+                    }}
+                    className="hidden file:flex file:w-full file:flex-col file:mb-2 file:py-1 file:px-4 file:rounded-full file:border-[1px] file:border-zinc-500 file:text-sm file:font-semibold file:bg-transparent file:appearance-none file:text-gray-400 hover:file:bg-zinc-200 hover:file:text-slate-900 text-sm text-center text-gray-500"
+                  />
+                </label>
+                {targetLink && (
+                  <img
+                    src={targetLink}
+                    alt="uploaded image for a collage"
+                    className="absolute h-full w-full opacity-10 pointer-events-none blur-sm"
+                  />
+                )}
+              </>
             )}
-            {isLoading ? (
-              <div className="animate-pulse text-gray-300">
-                Loading your playlist...
-              </div>
-            ) : null}
           </div>
         </div>
         <div className="lg:justify-evenly lg:mx-0 md:w-5/12 w-full flex flex-col items-center justify-center mx-6 mt-3">
           <div className="text-while w-full mx-6 my-3">
             <label
               htmlFor="playlistInput"
-              className="md:w-2/3 w-10/12 text-xl font-bold text-gray-300"
+              className="mr-4 text-xl font-bold text-gray-300 flex flex-row gap-x-4 items-center"
             >
               Link playlist
+              {isLoading ? (
+                <svg
+                  className="animate-spin -ml-1 mr-3 mt- h-5 w-5 text-green-400 "
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    stroke-width="4"
+                  ></circle>
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  ></path>
+                </svg>
+              ) : null}
             </label>
             <input
               id="playlistInput"
@@ -178,7 +218,7 @@ export default function Home() {
               name="collageOptions"
               id="size"
               className="peer/size hidden"
-              onClick={() => setCurrentOption("size")}
+              onChange={() => setCurrentOption("size")}
             />
             <label
               htmlFor="size"
@@ -188,11 +228,12 @@ export default function Home() {
               <span className="sm:hidden">Size</span>
             </label>
             <input
+              checked={currentOption === "color"}
               type="radio"
               name="collageOptions"
               id="color"
               className="peer/color hidden"
-              onClick={() => setCurrentOption("color")}
+              onChange={() => setCurrentOption("color")}
             />
             <label
               htmlFor="color"
@@ -205,7 +246,7 @@ export default function Home() {
               name="collageOptions"
               id="grid"
               className="peer/grid hidden"
-              onClick={() => setCurrentOption("grid")}
+              onChange={() => setCurrentOption("grid")}
             />
             <label
               htmlFor="grid"
@@ -217,15 +258,16 @@ export default function Home() {
             <input
               type="range"
               name={currentOption}
-              onChange={(e) =>
+              onChange={(e) => {
                 setCollageOptions((prev) =>
                   Object.assign(
                     {},
                     prev,
                     (prev.size = Number(e.target.value) * 800)
                   )
-                )
-              }
+                );
+                setStartGeneration(false);
+              }}
               min="1"
               max="3"
               step="1"
@@ -237,15 +279,16 @@ export default function Home() {
               min="0"
               max="100"
               step="1"
-              onChange={(e) =>
+              onChange={(e) => {
                 setCollageOptions((prev) =>
                   Object.assign(
                     {},
                     prev,
                     (prev.color = Number(e.target.value) * 0.01)
                   )
-                )
-              }
+                );
+                setStartGeneration(false);
+              }}
               className=" peer-checked/color:block hidden appearance-none bg-transparent color-gray-500 w-full mt-1.5 lg:mt-4 grow"
             />
             <input
@@ -254,24 +297,33 @@ export default function Home() {
               min="4"
               max="80"
               step="4"
-              onChange={(e) =>
+              onChange={(e) => {
                 setCollageOptions((prev) =>
                   Object.assign({}, prev, (prev.grid = Number(e.target.value)))
-                )
-              }
+                );
+                setStartGeneration(false);
+              }}
               className=" peer-checked/grid:block hidden appearance-none bg-transparent color-gray-500 w-full mt-1.5 lg:mt-4 grow"
             />
           </form>
           <button
             className={
-              " active:scale-95 px-10 py-3 mt-5 mb-3 text-sm font-bold  transition-transform " +
+              " active:scale-95 px-10 relative py-3 mt-5 mb-3 text-sm font-bold transition-transform z-10 " +
               (data && targetLink
                 ? "bg-green-500 rounded-full text-white"
-                : "bg-transparent border-[1px] border-zinc-400 rounded-full text-zinc-400")
+                : " bg-transparent border-[1px] border-zinc-400 rounded-full text-zinc-400")
             }
             onClick={generateCollage}
           >
             Generate Collage
+            <div
+              className={
+                "absolute appearance-none inset-0 rounded-full -z-10 " +
+                (data && targetLink && !startGeneration
+                  ? " bg-green-500  animate-ping-once "
+                  : " bg-transparent ")
+              }
+            ></div>
           </button>
         </div>
       </main>

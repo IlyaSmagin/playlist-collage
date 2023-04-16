@@ -72,3 +72,15 @@ input[type="range"]::-ms-fill-upper {
 input[type="range"]:focus::-ms-fill-upper {
   background: #3f3f46;
 }
+
+.animate-ping-once {
+  animation: ping-once 1s cubic-bezier(0, 0, 0.2, 1) 0.33s;
+}
+
+@keyframes ping-once {
+  75%,
+  100% {
+    transform: scale(1.2, 1.5);
+    opacity: 0;
+  }
+}
