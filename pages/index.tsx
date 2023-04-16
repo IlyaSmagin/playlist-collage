@@ -107,25 +107,23 @@ export default function Home() {
               <label
                 className=" flex flex-col items-end justify-center pt-2 "
                 htmlFor="photoUpload1"
+                onClick={(e) => e.stopPropagation()}
               >
-                <span
-                  onClick={(e) => e.stopPropagation()}
-                  className="cursor-pointer active:scale-95 px-10 py-3 mt-5 mb-3 text-sm font-bold text-white transition-transform bg-transparent border-[1px] rounded-full"
-                >
+                <span className="cursor-pointer active:scale-95 px-10 py-3 mt-5 mb-3 text-sm font-bold text-white transition-transform bg-transparent border-[1px] rounded-full">
                   Upload new image
                 </span>
-              <input
-                id="photoUpload1"
-                type="file"
-                accept="image/*"
-                onChange={(e) => {
-                  if (e.target.files instanceof FileList)
-                    return setTargetLink(
-                      URL.createObjectURL(e.target.files[0])
-                    );
-                }}
-                className="hidden"
-              />
+                <input
+                  id="photoUpload1"
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => {
+                    if (e.target.files instanceof FileList)
+                      setTargetLink(URL.createObjectURL(e.target.files[0]));
+                    setStartGeneration(true);
+                    setShowCanvasMenu(false);
+                  }}
+                  className="hidden"
+                />
               </label>
             </div>
           ) : null}
