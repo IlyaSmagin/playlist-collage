@@ -10,6 +10,7 @@ const options: RequestInit = {
     "X-RapidAPI-Host": process.env.NEXT_PUBLIC_API_HOST as string,
   },
 };
+type Data = { [key: string]: Array<string> };
 const fetcher = (url: string) =>
   fetch(url, options)
     .then(
@@ -20,9 +21,17 @@ const fetcher = (url: string) =>
           };
         }>
     )
-    .then((res) => {
-      return res.tracks.items.map((track) => track.track.album.images[0].url);
-    });
+    .then(
+      (res) =>
+        ({
+          albums: res.tracks.items.map(
+            (track) => track.track.album.images[0].url
+          ),
+          artists: res.tracks.items.map(
+            (track) => track.track.album.images[0].url
+          ),
+        } as Data)
+    );
 
 export default function Home() {
   const [playlistLink, setPlaylistLink] = useState("");
@@ -30,6 +39,7 @@ export default function Home() {
   const [targetLink, setTargetLink] = useState<string>();
   const [showCanvasMenu, setShowCanvasMenu] = useState(false);
   const [currentOption, setCurrentOption] = useState("color");
+  const [imagesCategory, setImagesCategory] = useState("albums");
   const [collageOptions, setCollageOptions] = useState({
     size: 800,
     color: 0.2,
@@ -74,10 +84,13 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <header className="mx-3 mt-3 text-white md:hidden">
-        <h1 className=" my-1 text-2xl font-bold ">Playlist collage</h1>
+      <header className="mx-3 min-h-[10%] justify-evenly flex flex-col text-white md:hidden">
+        <h1 className=" py-1 text-2xl font-bold ">Playlist collage</h1>
         <nav className="gap-7 flex flex-row mx-3 text-xl">
-          <button className="border-b border-green-500 appearance-none">
+          <button
+            className="border-b border-green-500 appearance-none"
+            onClick={() => setImagesCategory("albums")}
+          >
             Albums
           </button>
           <button disabled className="text-slate-500 appearance-none">
@@ -86,7 +99,7 @@ export default function Home() {
         </nav>
       </header>
 
-      <main className="md:flex-row lg:mx-6 lg:gap-x-28 md:h-full flex flex-col items-center justify-center mx-6 md:mt-0 mt-3">
+      <main className="md:flex-row lg:mx-6 lg:gap-x-28 min-h-[89%] md:h-full flex flex-col items-center justify-around md:justify-center mx-6">
         <div
           className={
             "sm:w-2/3 md:w-2/5 aspect-square bg-zinc-800 relative flex flex-col items-center justify-center w-full"
@@ -94,7 +107,7 @@ export default function Home() {
         >
           {showCanvasMenu ? (
             <div
-              className="aspect-square collage-wrapper bg-zinc-800/50 absolute z-20 flex flex-col items-center justify-center w-full mt-12 mb-12 text-white"
+              className="aspect-square collage-wrapper bg-zinc-800/50 absolute z-20 flex flex-col items-center justify-center w-full text-white"
               onClick={() => setShowCanvasMenu((prev) => !prev)}
             >
               <button
@@ -127,7 +140,7 @@ export default function Home() {
               </label>
             </div>
           ) : null}
-          <div className="aspect-square collage-wrapper absolute z-10 flex flex-col items-center justify-center w-full mt-12 mb-12">
+          <div className="aspect-square collage-wrapper absolute z-10 flex flex-col items-center justify-center w-full">
             {data && startGeneration ? (
               <div onClick={() => setShowCanvasMenu((prev) => !prev)}>
                 <ReactImageMosaic
@@ -135,7 +148,7 @@ export default function Home() {
                   height={collageOptions.size}
                   rows={collageOptions.grid}
                   columns={collageOptions.grid}
-                  sources={data}
+                  sources={data[imagesCategory]}
                   colorBlending={collageOptions.color}
                   target={targetLink || "./mal.jpg"}
                   crossOrigin={"anonymous"}
@@ -174,7 +187,7 @@ export default function Home() {
             )}
           </div>
         </div>
-        <div className="lg:justify-between lg:mx-0 md:w-5/12 w-full flex flex-col md:aspect-square items-center justify-center mx-6 mt-3">
+        <div className="lg:justify-between lg:mx-0 md:w-5/12 w-full h-full md:h-auto flex flex-col md:aspect-square gap-y-4 items-center justify-center mx-6">
           <header className="mx-3 mt-3 md:mt-0 text-white hidden md:block w-full">
             <h1 className=" my-1 md:my-0 md:mb-3 text-2xl font-bold ">
               Playlist collage
@@ -189,7 +202,7 @@ export default function Home() {
             </nav>
           </header>
 
-          <div className="text-while w-full mx-6 my-3">
+          <div className="text-while w-full mx-6">
             <label
               htmlFor="playlistInput"
               className="mr-4 text-xl font-bold text-gray-300 flex flex-row gap-x-4 items-center"
@@ -227,7 +240,7 @@ export default function Home() {
               placeholder="Link to playlist"
             />
           </div>
-          <form className="md:text-base flex flex-row items-center justify-center w-full mx-6 gap-x-3 my-1 text-white text-sm flex-wrap">
+          <form className="md:text-base flex flex-row items-center justify-center w-full mx-6 gap-x-3 gap-y-1.5 text-white text-sm flex-wrap">
             <input
               type="radio"
               name="collageOptions"
@@ -323,7 +336,7 @@ export default function Home() {
           </form>
           <button
             className={
-              " active:scale-95 px-10 relative py-3 mt-5 mb-3 text-sm font-bold transition-transform z-10 " +
+              " active:scale-95 px-10 relative py-3 mt-2 mb-4 text-sm font-bold transition-transform z-10 " +
               (data && targetLink
                 ? "bg-green-500 rounded-full text-white"
                 : " bg-transparent border-[1px] border-zinc-400 rounded-full text-zinc-400")
