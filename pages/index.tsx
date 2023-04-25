@@ -1,7 +1,8 @@
 import Head from "next/head";
-import { useState, useCallback } from "react";
+import { useState, Dispatch, SetStateAction } from "react";
 import useSWR from "swr";
 import { ReactImageMosaic } from "react-image-mosaic";
+import { CollageOptions } from "@/components/CollageOptions";
 
 const options: RequestInit = {
   method: "GET",
@@ -40,7 +41,7 @@ export default function Home() {
   const [showCanvasMenu, setShowCanvasMenu] = useState(false);
   const [currentOption, setCurrentOption] = useState("color");
   const [imagesCategory, setImagesCategory] = useState("albums");
-  const [collageOptions, setCollageOptions] = useState({
+  const [collageOptions, setCollageOptions] = useState<CollageOptions>({
     size: 800,
     color: 0.2,
     grid: 40,
@@ -201,7 +202,6 @@ export default function Home() {
               </button>
             </nav>
           </header>
-
           <div className="text-while w-full mx-6">
             <label
               htmlFor="playlistInput"
@@ -240,100 +240,12 @@ export default function Home() {
               placeholder="Link to playlist"
             />
           </div>
-          <form className="md:text-base flex flex-row items-center justify-center w-full mx-6 gap-x-3 gap-y-1.5 text-white text-sm flex-wrap">
-            <input
-              type="radio"
-              name="collageOptions"
-              id="size"
-              className="peer/size hidden"
-              onChange={() => setCurrentOption("size")}
-            />
-            <label
-              htmlFor="size"
-              className="px-3 py-1 font-semibold border-[1px] border-zinc-700 rounded-full appearance-none peer-checked/size:bg-white peer-checked/size:border-white peer-checked/size:text-green-600"
-            >
-              <span className="sm:block hidden">Image size</span>{" "}
-              <span className="sm:hidden">Size</span>
-            </label>
-            <input
-              checked={currentOption === "color"}
-              type="radio"
-              name="collageOptions"
-              id="color"
-              className="peer/color hidden"
-              onChange={() => setCurrentOption("color")}
-            />
-            <label
-              htmlFor="color"
-              className="px-3 py-1 font-semibold border-[1px] border-zinc-700 rounded-full appearance-none  peer-checked/color:bg-white peer-checked/color:border-white peer-checked/color:text-green-600"
-            >
-              Coloring
-            </label>
-            <input
-              type="radio"
-              name="collageOptions"
-              id="grid"
-              className="peer/grid hidden"
-              onChange={() => setCurrentOption("grid")}
-            />
-            <label
-              htmlFor="grid"
-              className="px-3 py-1 font-semibold border-[1px] border-zinc-700 rounded-full appearance-none  peer-checked/grid:bg-white peer-checked/grid:border-white peer-checked/grid:text-green-600"
-            >
-              <span className="sm:block hidden">Grid size</span>{" "}
-              <span className="sm:hidden">Grid</span>
-            </label>
-            <input
-              type="range"
-              name={currentOption}
-              onChange={(e) => {
-                setCollageOptions((prev) =>
-                  Object.assign(
-                    {},
-                    prev,
-                    (prev.size = Number(e.target.value) * 800)
-                  )
-                );
-                setStartGeneration(false);
-              }}
-              min="1"
-              max="3"
-              step="1"
-              className=" peer-checked/size:block hidden appearance-none bg-transparent color-gray-500 w-full mt-1.5 lg:mt-4 grow"
-            />
-            <input
-              type="range"
-              name={currentOption}
-              min="0"
-              max="100"
-              step="1"
-              onChange={(e) => {
-                setCollageOptions((prev) =>
-                  Object.assign(
-                    {},
-                    prev,
-                    (prev.color = Number(e.target.value) * 0.01)
-                  )
-                );
-                setStartGeneration(false);
-              }}
-              className=" peer-checked/color:block hidden appearance-none bg-transparent color-gray-500 w-full mt-1.5 lg:mt-4 grow"
-            />
-            <input
-              type="range"
-              name={currentOption}
-              min="4"
-              max="80"
-              step="4"
-              onChange={(e) => {
-                setCollageOptions((prev) =>
-                  Object.assign({}, prev, (prev.grid = Number(e.target.value)))
-                );
-                setStartGeneration(false);
-              }}
-              className=" peer-checked/grid:block hidden appearance-none bg-transparent color-gray-500 w-full mt-1.5 lg:mt-4 grow"
-            />
-          </form>
+          <CollageOptions
+            setStartGeneration={setStartGeneration}
+            currentOption={currentOption}
+            setCurrentOption={setCurrentOption}
+            setCollageOptions={setCollageOptions}
+          />
           <button
             className={
               " active:scale-95 px-10 relative py-3 mt-2 mb-4 text-sm font-bold transition-transform z-10 " +
