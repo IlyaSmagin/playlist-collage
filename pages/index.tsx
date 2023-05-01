@@ -32,8 +32,12 @@ const fetcher = (url: string) =>
             (track) => track.track.album.images[0].url
           ),
         } as Data)
-  );
-const ImageMosaic : React.FC<{options:CollageOptions, targetLink:string, data:Array<string>}> = memo(({ options, targetLink, data}) => {
+    );
+const ImageMosaic: React.FC<{
+  options: CollageOptions;
+  targetLink: string;
+  data: Array<string>;
+}> = memo(function ImageMosaic({ options, targetLink, data }) {
   return (
     <ReactImageMosaic
       width={options.size}
@@ -42,11 +46,11 @@ const ImageMosaic : React.FC<{options:CollageOptions, targetLink:string, data:Ar
       columns={options.grid}
       sources={data}
       colorBlending={options.color}
-      target={targetLink || "./mal.jpg"}
-      crossOrigin={"anonymous"} />
-  )
+      target={targetLink}
+      crossOrigin={"anonymous"}
+    />
+  );
 });
-
 
 export default function Home() {
   const [playlistLink, setPlaylistLink] = useState("");
@@ -60,7 +64,7 @@ export default function Home() {
     color: 0.2,
     grid: 40,
   });
- const deferredOptions = useDeferredValue(collageOptions);
+  const deferredOptions = useDeferredValue(collageOptions);
   const playlistREGEX = /.*playlist\//i;
   const playlistURL =
     "https://spotify23.p.rapidapi.com/playlist_tracks/?id=" + playlistLink;
