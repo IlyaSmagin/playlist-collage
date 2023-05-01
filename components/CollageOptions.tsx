@@ -6,13 +6,11 @@ export type CollageOptions = {
   grid: number;
 };
 type OptionProps = {
-  setStartGeneration: (value: boolean) => void;
   currentOption: string;
   setCurrentOption: (value: string) => void;
   setCollageOptions: Dispatch<SetStateAction<CollageOptions>>;
 };
 export const CollageOptions: React.FC<OptionProps> = ({
-  setStartGeneration,
   currentOption,
   setCurrentOption,
   setCollageOptions,
@@ -63,12 +61,11 @@ export const CollageOptions: React.FC<OptionProps> = ({
       </label>
       <input
         type="range"
-        name={currentOption}
+        name="size"
         onChange={(e) => {
           setCollageOptions((prev: CollageOptions) =>
             Object.assign({}, prev, (prev.size = Number(e.target.value) * 800))
           );
-          setStartGeneration(false);
         }}
         min="1"
         max="3"
@@ -77,7 +74,7 @@ export const CollageOptions: React.FC<OptionProps> = ({
       />
       <input
         type="range"
-        name={currentOption}
+        name="color"
         min="0"
         max="100"
         step="1"
@@ -89,13 +86,12 @@ export const CollageOptions: React.FC<OptionProps> = ({
               (prev.color = Number(e.target.value) * 0.01)
             )
           );
-          setStartGeneration(false);
         }}
         className=" peer-checked/color:block hidden appearance-none bg-transparent color-gray-500 w-full mt-1.5 lg:mt-4 grow"
       />
       <input
         type="range"
-        name={currentOption}
+        name="grid"
         min="4"
         max="80"
         step="4"
@@ -103,7 +99,6 @@ export const CollageOptions: React.FC<OptionProps> = ({
           setCollageOptions((prev: CollageOptions) =>
             Object.assign({}, prev, (prev.grid = Number(e.target.value)))
           );
-          setStartGeneration(false);
         }}
         className=" peer-checked/grid:block hidden appearance-none bg-transparent color-gray-500 w-full mt-1.5 lg:mt-4 grow"
       />

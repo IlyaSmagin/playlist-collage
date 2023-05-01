@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { useState, Dispatch, SetStateAction } from "react";
+import { useState, useDeferredValue, memo } from "react";
 import useSWR from "swr";
 import { ReactImageMosaic } from "react-image-mosaic";
 import { CollageOptions } from "@/components/CollageOptions";
@@ -32,7 +32,21 @@ const fetcher = (url: string) =>
             (track) => track.track.album.images[0].url
           ),
         } as Data)
-    );
+  );
+const ImageMosaic : React.FC<{options:CollageOptions, targetLink:string, data:Array<string>}> = memo(({ options, targetLink, data}) => {
+  return (
+    <ReactImageMosaic
+      width={options.size}
+      height={options.size}
+      rows={options.grid}
+      columns={options.grid}
+      sources={data}
+      colorBlending={options.color}
+      target={targetLink || "./mal.jpg"}
+      crossOrigin={"anonymous"} />
+  )
+});
+
 
 export default function Home() {
   const [playlistLink, setPlaylistLink] = useState("");
@@ -46,7 +60,7 @@ export default function Home() {
     color: 0.2,
     grid: 40,
   });
-
+ const deferredOptions = useDeferredValue(collageOptions);
   const playlistREGEX = /.*playlist\//i;
   const playlistURL =
     "https://spotify23.p.rapidapi.com/playlist_tracks/?id=" + playlistLink;
@@ -70,7 +84,7 @@ export default function Home() {
     downloadURI(uri, "collage.png");
   };
   const generateCollage = () => {
-    if (data && targetLink) setStartGeneration((prev) => !prev);
+    if (data && targetLink) setStartGeneration(true);
   };
 
   return (
@@ -94,7 +108,7 @@ export default function Home() {
           >
             Albums
           </button>
-          <button disabled className="text-slate-500 appearance-none">
+          <button disabled className="hidden text-slate-500 appearance-none">
             Artists
           </button>
         </nav>
@@ -144,15 +158,10 @@ export default function Home() {
           <div className="aspect-square collage-wrapper absolute z-10 flex flex-col items-center justify-center w-full">
             {data && startGeneration ? (
               <div onClick={() => setShowCanvasMenu((prev) => !prev)}>
-                <ReactImageMosaic
-                  width={collageOptions.size}
-                  height={collageOptions.size}
-                  rows={collageOptions.grid}
-                  columns={collageOptions.grid}
-                  sources={data[imagesCategory]}
-                  colorBlending={collageOptions.color}
-                  target={targetLink || "./mal.jpg"}
-                  crossOrigin={"anonymous"}
+                <ImageMosaic
+                  options={deferredOptions}
+                  data={data[imagesCategory]}
+                  targetLink={targetLink || "./mal.jpg"}
                 />
               </div>
             ) : (
@@ -197,7 +206,10 @@ export default function Home() {
               <button className="border-b border-green-500 appearance-none">
                 Albums
               </button>
-              <button disabled className="text-slate-500 appearance-none">
+              <button
+                disabled
+                className="hidden text-slate-500 appearance-none"
+              >
                 Artists
               </button>
             </nav>
@@ -241,7 +253,6 @@ export default function Home() {
             />
           </div>
           <CollageOptions
-            setStartGeneration={setStartGeneration}
             currentOption={currentOption}
             setCurrentOption={setCurrentOption}
             setCollageOptions={setCollageOptions}
