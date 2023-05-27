@@ -112,6 +112,14 @@ export default function Home() {
           >
             Albums
           </button>
+          <button
+            className="border-b border-green-500 appearance-none text-gray-400 active:text-white"
+            onClick={() =>
+              setPlaylistLink("6gpIBV1ghZ55VdOfo1sOBE?si=e52d870890bc4701")
+            }
+          >
+            Playlist link
+          </button>
           <button disabled className="hidden text-slate-500 appearance-none">
             Artists
           </button>
@@ -211,6 +219,14 @@ export default function Home() {
                 Albums
               </button>
               <button
+                className="border-b border-green-500 appearance-none text-gray-400 active:text-white"
+                onClick={() =>
+                  setPlaylistLink("6gpIBV1ghZ55VdOfo1sOBE?si=e52d870890bc4701")
+                }
+              >
+                Playlist link
+              </button>
+              <button
                 disabled
                 className="hidden text-slate-500 appearance-none"
               >
@@ -252,6 +268,7 @@ export default function Home() {
               onChange={(e) =>
                 setPlaylistLink(e.target.value.replace(playlistREGEX, ""))
               }
+              value={playlistLink}
               className="lg:my-4 focus:placeholder:text-green-400 placeholder:text-gray-400 focus:border-green-400 bg-none focus:outline-none focus:caret-green-500 dark:highlight-white/5 bg-zinc-800 w-full px-8 py-2 mt-1 text-sm text-green-400 rounded-md appearance-none"
               placeholder="Link to playlist"
             />
