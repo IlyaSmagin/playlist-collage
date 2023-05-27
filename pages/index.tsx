@@ -3,6 +3,7 @@ import { useState, useDeferredValue, memo } from "react";
 import useSWR from "swr";
 import { ReactImageMosaic } from "react-image-mosaic";
 import { CollageOptions } from "@/components/CollageOptions";
+import { TabHeader } from "@/components/TabHeader";
 
 const options: RequestInit = {
   method: "GET",
@@ -103,28 +104,10 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <header className="mx-3 min-h-[10%] justify-evenly flex flex-col text-white md:hidden">
-        <h1 className=" py-1 text-2xl font-bold ">Playlist collage</h1>
-        <nav className="gap-7 flex flex-row mx-3 text-xl">
-          <button
-            className="border-b border-green-500 appearance-none"
-            onClick={() => setImagesCategory("albums")}
-          >
-            Albums
-          </button>
-          <button
-            className="border-b border-green-500 appearance-none text-gray-400 active:text-white"
-            onClick={() =>
-              setPlaylistLink("6gpIBV1ghZ55VdOfo1sOBE?si=e52d870890bc4701")
-            }
-          >
-            Playlist link
-          </button>
-          <button disabled className="hidden text-slate-500 appearance-none">
-            Artists
-          </button>
-        </nav>
-      </header>
+      <TabHeader
+        setPlaylistLink={setPlaylistLink}
+        setImagesCategory={setImagesCategory}
+      />
 
       <main className="md:flex-row lg:mx-6 lg:gap-x-28 min-h-[89%] md:h-full flex flex-col items-center justify-around md:justify-center mx-6">
         <div
@@ -210,30 +193,10 @@ export default function Home() {
           </div>
         </div>
         <div className="lg:justify-between lg:mx-0 md:w-5/12 w-full h-full md:h-auto flex flex-col md:aspect-square gap-y-4 items-center justify-center mx-6">
-          <header className="mx-3 mt-3 md:mt-0 text-white hidden md:block w-full">
-            <h1 className=" my-1 md:my-0 md:mb-3 text-2xl font-bold ">
-              Playlist collage
-            </h1>
-            <nav className="gap-7 flex flex-row mx-3 text-xl">
-              <button className="border-b border-green-500 appearance-none">
-                Albums
-              </button>
-              <button
-                className="border-b border-green-500 appearance-none text-gray-400 active:text-white"
-                onClick={() =>
-                  setPlaylistLink("6gpIBV1ghZ55VdOfo1sOBE?si=e52d870890bc4701")
-                }
-              >
-                Playlist link
-              </button>
-              <button
-                disabled
-                className="hidden text-slate-500 appearance-none"
-              >
-                Artists
-              </button>
-            </nav>
-          </header>
+          <TabHeader
+            setPlaylistLink={setPlaylistLink}
+            setImagesCategory={setImagesCategory}
+          />
           <div className="text-while w-full mx-6">
             <label
               htmlFor="playlistInput"
