@@ -107,6 +107,7 @@ export default function Home() {
       <TabHeader
         setPlaylistLink={setPlaylistLink}
         setImagesCategory={setImagesCategory}
+        tailwindVisibility="md:hidden"
       />
 
       <main className="md:flex-row lg:mx-6 lg:gap-x-28 min-h-[89%] md:h-full flex flex-col items-center justify-around md:justify-center mx-6">
@@ -196,6 +197,7 @@ export default function Home() {
           <TabHeader
             setPlaylistLink={setPlaylistLink}
             setImagesCategory={setImagesCategory}
+            tailwindVisibility="hidden md:block "
           />
           <div className="text-while w-full mx-6">
             <label

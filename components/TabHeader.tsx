@@ -1,11 +1,20 @@
 type TabProps = {
   setPlaylistLink: (value: string) => void;
   setImagesCategory: (value: "album" | "artist") => void;
+  tailwindVisibility: string;
 };
 
-export const TabHeader: React.FC<TabProps> = ({ setPlaylistLink, setImagesCategory }) => {
+export const TabHeader: React.FC<TabProps> = ({
+  setPlaylistLink,
+  setImagesCategory,
+  tailwindVisibility,
+}) => {
+  //hidden md:block
+  //md:hidden
   return (
-    <header className="mx-3 mt-3 md:mt-0 text-white hidden md:block w-full">
+    <header
+      className={"mx-3 mt-3 md:mt-0 text-white w-full " + tailwindVisibility}
+    >
       <h1 className=" my-1 md:my-0 md:mb-3 text-2xl font-bold ">
         Playlist collage
       </h1>
