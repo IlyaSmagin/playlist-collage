@@ -5,65 +5,8 @@ import { ReactImageMosaic } from "react-image-mosaic";
 import { CollageOptions } from "@/components/CollageOptions";
 import { TabHeader } from "@/components/TabHeader";
 import { PlaylistInput } from "@/components/PlaylistInput";
+import { Data } from "./api/getAlbumImages";
 
-const options: RequestInit = {
-	method: "GET",
-	headers: {
-		"X-RapidAPI-Key": process.env.NEXT_PUBLIC_API_KEY as string,
-		"X-RapidAPI-Host": process.env.NEXT_PUBLIC_API_HOST as string,
-	},
-};
-type Data = { [key: string]: Array<string> };
-const fetcher = (url: string) => {
-	const tracksUrl =
-		"https://spotify23.p.rapidapi.com/playlist_tracks/?id=" + url;
-	return fetch(tracksUrl, options)
-		.then(
-			(res) =>
-				res.json() as Promise<{
-					tracks: {
-						items: {
-							track: {
-								album: {
-									images: { url: string }[];
-									artists: { id: string }[];
-								};
-							};
-						}[];
-					};
-				}>
-		)
-		.then((resTrack) => {
-			let ids = resTrack.tracks.items.reduce((acc, track, index) => {
-				if (index < 40) {
-					return acc + track.track.album.artists[0].id + ",";
-				}
-				return acc;
-			}, "");
-			const artistsUrl =
-				"https://spotify23.p.rapidapi.com/artists/?ids=" +
-				ids.slice(0, -1);
-			return fetch(artistsUrl, options)
-				.then(
-					(resArtist) =>
-						resArtist.json() as Promise<{
-							artists: {
-								images: { url: string }[];
-							}[];
-						}>
-				)
-				.then((resArtist) => {
-					return {
-						albums: resTrack.tracks.items.map(
-							(track) => track.track.album.images[0].url
-						),
-						artists: resArtist.artists.map(
-							(artist) => artist.images[0].url
-						),
-					} as Data;
-				});
-		});
-};
 
 export default function Home() {
 	const [playlistLink, setPlaylistLink] = useState("");
@@ -78,10 +21,12 @@ export default function Home() {
 		grid: 40,
 	});
 	const deferredOptions = useDeferredValue(collageOptions);
+	
 	const { data, error, isLoading } = useSWR(
-		playlistLink.length > 1 ? [playlistLink, options] : null,
-		([playlistLink, options]) => fetcher(playlistLink)
+  		playlistLink.length > 1 ? `/api/getAlbumImages?id=${playlistLink}` : null,
+  		(url: string) => fetch(url).then((res) => res.json() as Promise<Data>)
 	);
+
 	function downloadURI(uri: string, name: string) {
 		var link = document.createElement("a");
 		link.download = name;
